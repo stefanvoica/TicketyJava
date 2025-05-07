@@ -1,15 +1,12 @@
+import Entitati.Client;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
-
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        Client client1 = new Client("Popescu Ion", "ion@gmail.com", 15, "Bucuresti");
+        Client client2 = new Client("Ionescu George", "george@gmail.com", 25, "Ploiesti");
+        Client client3 = new Client("Ion Marcel", "marcel@yahoo.com", 30, "Constanta");
+        System.out.println(client1.toString());
     }
 }
