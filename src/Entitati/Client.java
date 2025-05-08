@@ -20,6 +20,10 @@ public class Client {
         this.bilete = new ArrayList<>();
     }
 
+    public List<Bilet> getBilete() {
+        return bilete;
+    }
+
     @Override
     public String toString() {
         return "Client{" +

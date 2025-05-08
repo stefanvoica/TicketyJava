@@ -9,13 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 public interface ServiciuClient {
-
-    // Cumpără unul sau mai multe locuri la un eveniment
-    Bilet cumparaBilet(Client client, Eveniment eveniment, Set<Integer> locuriDorite);
+    // Creează și înregistrează un nou client
+    Client creazaClient(String nume, String email, int varsta, String adresa);
 
     // Returnează lista de bilete ale clientului
     List<Bilet> getBileteClient(Client client);
-
-    // Validează un bilet (ex: la intrare) si returneaza daca s-a reusit
-    boolean valideazaBilet(Bilet bilet);
 }
