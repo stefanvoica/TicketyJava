@@ -9,6 +9,9 @@ import java.util.Set;
 
 public interface ServiciuEveniment {
     Eveniment adaugaEveniment(TipEveniment tip, String nume, Locatie locatie, LocalDateTime data);
+    Eveniment adaugaEvenimentCultural(TipEveniment tip, String nume, Locatie locatie, LocalDateTime data, int durata, String limba);
+    Eveniment adaugaEvenimentSportiv(String nume, Locatie locatie, LocalDateTime data, String echipa1, String echipa2, boolean esteDerby);
+
     void stergeEveniment(Eveniment eveniment);
     void actualizeazaEveniment(Eveniment eveniment, String numeNou, Locatie locatieNoua, LocalDateTime dataNoua);
 

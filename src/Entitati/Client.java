@@ -3,7 +3,7 @@ package Entitati;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client {
+public class Client implements Comparable<Client> {
     private String nume;
     private String email;
     private int varsta;
@@ -20,8 +20,26 @@ public class Client {
         this.bilete = new ArrayList<>();
     }
 
+    public void adaugaBilet(Bilet bilet) {
+        try {
+            this.bilete.add(bilet);  // Adaugă biletul la lista de bilete
+            numarBilete++;  // Actualizează numărul de bilete
+        } catch (Exception e) {
+            System.out.println("Eroare la adăugarea biletului: " + e.getMessage());
+        }
+    }
+
+
     public List<Bilet> getBilete() {
         return bilete;
+    }
+
+    public String getNume() {
+        return nume;
+    }
+
+    private int getNumarBilete() {
+        return numarBilete;
     }
 
     @Override
@@ -32,7 +50,11 @@ public class Client {
                 ", varsta=" + varsta +
                 ", adresa='" + adresa + '\'' +
                 ", numarBilete=" + numarBilete +
-                ", bilete=" + bilete +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Client altClient) {
+        return Integer.compare(this.getNumarBilete(), altClient.getNumarBilete());
     }
 }

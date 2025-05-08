@@ -25,6 +25,6 @@ public class ServiciuClientImplementation implements ServiciuClient {
 
     @Override
     public List<Bilet> getBileteClient(Client client) {
-        return new ArrayList<>(client.getBilete());
+        return client.getBilete();
     }
 }

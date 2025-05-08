@@ -1,6 +1,8 @@
 package Servicii;
 
 import Entitati.Eveniment;
+import Entitati.EvenimentCultural;
+import Entitati.EvenimentSportiv;
 import Entitati.Locatie;
 import Utile.TipEveniment;
 
@@ -20,6 +22,25 @@ public class ServiciuEvenimentImplementation implements ServiciuEveniment {
 
         return eveniment;
     }
+
+    @Override
+    public Eveniment adaugaEvenimentCultural(TipEveniment tip, String nume, Locatie locatie, LocalDateTime data, int durata, String limba) {
+        EvenimentCultural ec = new EvenimentCultural(tip, nume, locatie, data, durata, limba);
+        evenimente.add(ec);
+        System.out.println("Eveniment adăugat cu succes: " + ec.toString());
+
+        return ec;
+    }
+
+    @Override
+    public Eveniment adaugaEvenimentSportiv(String nume, Locatie locatie, LocalDateTime data, String echipa1, String echipa2, boolean esteDerby) {
+        EvenimentSportiv es = new EvenimentSportiv(nume, locatie, data, echipa1, echipa2, esteDerby);
+        evenimente.add(es);
+        System.out.println("Eveniment adăugat cu succes: " + es.toString());
+
+        return es;
+    }
+
 
     @Override
     public void stergeEveniment(Eveniment eveniment) {

@@ -3,9 +3,7 @@ import Servicii.*;
 import Utile.TipEveniment;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -26,11 +24,11 @@ public class Main {
         }
 
         ServiciuEveniment serviciuEveniment = new ServiciuEvenimentImplementation();
-        Eveniment ev1 = serviciuEveniment.adaugaEveniment(TipEveniment.SPORT, "FCSB vs Rapid", locatie1, LocalDateTime.of(2025, 3, 31, 20, 45));
-        Eveniment ev2 = serviciuEveniment.adaugaEveniment(TipEveniment.TEATRU, "O scrisoare pierdută", locatie3, LocalDateTime.of(2025, 4, 23, 16, 30));
-        Eveniment ev3 = serviciuEveniment.adaugaEveniment(TipEveniment.CONCERT, "Ed Sheeran", locatie1, LocalDateTime.of(2025, 6, 15, 22, 0));
-        Eveniment ev4 = serviciuEveniment.adaugaEveniment(TipEveniment.SPORT, "Dinamo vs U Craiova", locatie2, LocalDateTime.of(2025, 5, 9, 21, 15));
-        Eveniment ev5 = serviciuEveniment.adaugaEveniment(TipEveniment.FILM, "Titanic", locatie3, LocalDateTime.of(2025, 4, 30, 19, 30));
+        Eveniment ev1 = serviciuEveniment.adaugaEvenimentSportiv("FCSB vs Rapid", locatie1, LocalDateTime.of(2025, 3, 31, 20, 45), "FCSB", "Rapid", true);
+        Eveniment ev2 = serviciuEveniment.adaugaEvenimentCultural(TipEveniment.TEATRU, "O scrisoare pierdută", locatie3, LocalDateTime.of(2025, 4, 23, 16, 30), 95, "română");
+        Eveniment ev3 = serviciuEveniment.adaugaEvenimentCultural(TipEveniment.CONCERT, "Ed Sheeran", locatie1, LocalDateTime.of(2025, 6, 15, 22, 0), 120, "engleză");
+        Eveniment ev4 = serviciuEveniment.adaugaEvenimentSportiv("Dinamo vs U Craiova", locatie2, LocalDateTime.of(2025, 5, 9, 21, 15), "Dinamo", "U Craiova", true);
+        Eveniment ev5 = serviciuEveniment.adaugaEvenimentCultural(TipEveniment.FILM, "Titanic", locatie3, LocalDateTime.of(2025, 4, 30, 19, 30), 180, "engleză");
 
         serviciuEveniment.actualizeazaEveniment(ev3, "Ed Sheeran LIVE", locatie1, LocalDateTime.of(2025, 6, 15, 21, 30));
 
@@ -49,18 +47,11 @@ public class Main {
         //============================================================
         ServiciuClient serviciuClient = new ServiciuClientImplementation();
 
-        // Adaugi 4 clienți
         Client client1 = serviciuClient.creazaClient("Ion Popescu", "ion.popescu@email.com", 25, "Str. Libertatii 10");
         Client client2 = serviciuClient.creazaClient("Maria Ionescu", "maria.ionescu@email.com", 30, "Bd. Unirii 15");
         Client client3 = serviciuClient.creazaClient("Alex Vasile", "alex.vasile@email.com", 22, "Aleea Parcului 5");
         Client client4 = serviciuClient.creazaClient("Elena Marin", "elena.marin@email.com", 28, "Str. Victoriei 20");
 
-        // Poți verifica lista de clienți (dacă ai o metodă pentru asta)
-        System.out.println("Au fost adăugați 4 clienți:");
-        System.out.println(client1);
-        System.out.println(client2);
-        System.out.println(client3);
-        System.out.println(client4);
 
         //============================================================
         ServiciuBilet serviciuBilet = new ServiciuBiletImplementation();
@@ -83,5 +74,9 @@ public class Main {
         boolean valid = serviciuBilet.valideazaBilet(bilet1);
         System.out.println("Bilet validat: " + valid);
 
+
+        // Obținem lista de bilete ale unor clienți
+        System.out.println("Biletele cumpărate de " + client1.getNume() + ": " + client1.getBilete());
+        System.out.println("Biletele cumpărate de " + client2.getNume() + ": " + client2.getBilete());
     }
 }

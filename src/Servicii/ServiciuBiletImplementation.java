@@ -20,9 +20,12 @@ public class ServiciuBiletImplementation implements ServiciuBilet {
 
         eveniment.rezervaLocuri(locuriDorite);
 
-        double pret = locuriDorite.size() * 50.0;
+        double pret = locuriDorite.size() * 50.1;
         Bilet bilet = new Bilet(eveniment, client, locuriDorite, pret);
-        System.out.println("Bilet cumparat cu succes!" + bilet);
+
+        client.adaugaBilet(bilet);
+
+        System.out.println("Bilet cumparat cu succes: " + bilet);
         return bilet;
     }
 

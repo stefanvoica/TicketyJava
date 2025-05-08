@@ -6,7 +6,7 @@ import java.util.Set;
 
 import static Utile.ClientUtils.idCurent;
 
-public class Bilet {
+public class Bilet implements Comparable<Bilet> {
     private final int idBilet;
     private Eveniment eveniment;
     private Client client;
@@ -28,6 +28,10 @@ public class Bilet {
         this.validat = validat;
     }
 
+    public double getPret() {
+        return pret;
+    }
+
     public Status isValidat() {
         return validat;
     }
@@ -42,5 +46,10 @@ public class Bilet {
                 ", pret=" + pret +
                 ", validat=" + validat +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Bilet altBilet) {
+        return Double.compare(this.getPret(), altBilet.getPret());
     }
 }
