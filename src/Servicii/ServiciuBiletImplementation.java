@@ -3,13 +3,13 @@ package Servicii;
 import Entitati.Bilet;
 import Entitati.Client;
 import Entitati.Eveniment;
+import Repositories.BiletRepo;
 import Utile.Status;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class ServiciuBiletImplementation implements ServiciuBilet {
-
     @Override
     public Bilet cumparaBilet(Client client, Eveniment eveniment, Set<Integer> locuriDorite) {
         // Verificăm dacă locurile sunt disponibile
@@ -26,6 +26,8 @@ public class ServiciuBiletImplementation implements ServiciuBilet {
         client.adaugaBilet(bilet);
 
         System.out.println("Bilet cumparat cu succes: " + bilet);
+
+        BiletRepo.adaugaBilet(bilet);
         return bilet;
     }
 

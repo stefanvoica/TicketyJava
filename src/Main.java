@@ -1,4 +1,7 @@
 import Entitati.*;
+import Repositories.BiletRepo;
+import Repositories.ClientRepo;
+import Repositories.EvenimentRepo;
 import Servicii.*;
 import Utile.TipEveniment;
 
@@ -23,6 +26,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
+        System.out.println();
         ServiciuEveniment serviciuEveniment = new ServiciuEvenimentImplementation();
         Eveniment ev1 = serviciuEveniment.adaugaEvenimentSportiv("FCSB vs Rapid", locatie1, LocalDateTime.of(2025, 3, 31, 20, 45), "FCSB", "Rapid", true);
         Eveniment ev2 = serviciuEveniment.adaugaEvenimentCultural(TipEveniment.TEATRU, "O scrisoare pierdută", locatie3, LocalDateTime.of(2025, 4, 23, 16, 30), 95, "română");
@@ -34,11 +38,27 @@ public class Main {
 
         serviciuEveniment.stergeEveniment(ev5);
 
-        List<Eveniment> sporturi = serviciuEveniment.getEvenimenteDupaTip(TipEveniment.SPORT);
+        System.out.println("\nAfisam evenimentele dupa tipul TEATRU:");
+        List<Eveniment> sporturi = serviciuEveniment.getEvenimenteDupaTip(TipEveniment.TEATRU);
         sporturi.forEach(System.out::println);
 
+        System.out.println("\nAfisam evenimentele viitoare:");
         List<Eveniment> viitoare = serviciuEveniment.getEvenimenteViitoare();
         viitoare.forEach(System.out::println);
+
+        System.out.println("\nEvenimente Sportive:");
+        for (Eveniment ev : EvenimentRepo.getEvenimente()) {
+            if (ev instanceof EvenimentSportiv) {
+                System.out.println(ev);
+            }
+        }
+
+        System.out.println("\nEvenimente Culturale:");
+        for (Eveniment ev : EvenimentRepo.getEvenimente()) {
+            if (ev instanceof EvenimentCultural) {
+                System.out.println(ev);
+            }
+        }
 
         System.out.println("\nRezervări:");
         serviciuEveniment.rezervaLocuri(ev1, Set.of(1, 2, 3));
@@ -47,8 +67,8 @@ public class Main {
         //============================================================
         ServiciuClient serviciuClient = new ServiciuClientImplementation();
 
-        Client client1 = serviciuClient.creazaClient("Ion Popescu", "ion.popescu@email.com", 25, "Str. Libertatii 10");
-        Client client2 = serviciuClient.creazaClient("Maria Ionescu", "maria.ionescu@email.com", 30, "Bd. Unirii 15");
+        Client client1 = serviciuClient.creazaClient("Maria Ionescu", "maria.ionescu@email.com", 30, "Bd. Unirii 15");
+        Client client2 = serviciuClient.creazaClient("Ion Popescu", "ion.popescu@email.com", 25, "Str. Libertatii 10");
         Client client3 = serviciuClient.creazaClient("Alex Vasile", "alex.vasile@email.com", 22, "Aleea Parcului 5");
         Client client4 = serviciuClient.creazaClient("Elena Marin", "elena.marin@email.com", 28, "Str. Victoriei 20");
 
@@ -78,5 +98,37 @@ public class Main {
         // Obținem lista de bilete ale unor clienți
         System.out.println("Biletele cumpărate de " + client1.getNume() + ": " + client1.getBilete());
         System.out.println("Biletele cumpărate de " + client2.getNume() + ": " + client2.getBilete());
+
+        // Afisam lista initala a clientilor
+        //System.out.println(ClientRepo.getClienti());
+        System.out.println("\nLista clienților:");
+        ClientRepo.afiseazaClienti();
+
+        // Lista sortată a clienților
+        ClientRepo.sorteazaClienti();
+        System.out.println("\nLista clienților sortată după nr. bilete (desc), nume(crescător):");
+        ClientRepo.afiseazaClienti();
+
+
+        // Afisam lista initiala a biletelor
+        System.out.println("\nLista initala a biletelor");
+        BiletRepo.afiseazaBilete();
+
+        // Sortam si afisam lista biletelor
+        BiletRepo.sorteazaBilete();
+        System.out.println("\nLista biletelor sortată după pret):");
+        BiletRepo.afiseazaBilete();
+
+        Map<TipEveniment, Integer> statisticaEvenimente = new HashMap<>();
+
+        for (Eveniment ev : Repositories.EvenimentRepo.getEvenimente()) {
+            TipEveniment tip = ev.getTip();
+            statisticaEvenimente.put(tip, statisticaEvenimente.getOrDefault(tip, 0) + 1);
+        }
+
+        System.out.println("\nNumăr de evenimente pe fiecare tip:");
+        for (Map.Entry<TipEveniment, Integer> entry : statisticaEvenimente.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
     }
 }

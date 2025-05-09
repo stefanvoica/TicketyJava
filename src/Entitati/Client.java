@@ -38,6 +38,10 @@ public class Client implements Comparable<Client> {
         return nume;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     private int getNumarBilete() {
         return numarBilete;
     }
@@ -55,6 +59,10 @@ public class Client implements Comparable<Client> {
 
     @Override
     public int compareTo(Client altClient) {
-        return Integer.compare(this.getNumarBilete(), altClient.getNumarBilete());
+        int nrBileteComparison = Integer.compare(altClient.getNumarBilete(), this.getNumarBilete());
+
+        if (nrBileteComparison == 0)
+            return this.getNume().compareTo(altClient.getNume());
+        return nrBileteComparison;
     }
 }

@@ -4,6 +4,7 @@ import Entitati.Eveniment;
 import Entitati.EvenimentCultural;
 import Entitati.EvenimentSportiv;
 import Entitati.Locatie;
+import Repositories.EvenimentRepo;
 import Utile.TipEveniment;
 
 import java.time.LocalDateTime;
@@ -11,12 +12,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ServiciuEvenimentImplementation implements ServiciuEveniment {
-    private List<Eveniment> evenimente = new ArrayList<>();
-
     @Override
     public Eveniment adaugaEveniment(TipEveniment tip, String nume, Locatie locatie, LocalDateTime data) {
         Eveniment eveniment = new Eveniment(tip, nume, locatie, data);
-        evenimente.add(eveniment);
+        EvenimentRepo.adaugaEveniment(eveniment);
 
         System.out.println("Eveniment adăugat cu succes: " + eveniment.toString());
 
@@ -26,7 +25,7 @@ public class ServiciuEvenimentImplementation implements ServiciuEveniment {
     @Override
     public Eveniment adaugaEvenimentCultural(TipEveniment tip, String nume, Locatie locatie, LocalDateTime data, int durata, String limba) {
         EvenimentCultural ec = new EvenimentCultural(tip, nume, locatie, data, durata, limba);
-        evenimente.add(ec);
+        EvenimentRepo.adaugaEveniment(ec);
         System.out.println("Eveniment adăugat cu succes: " + ec.toString());
 
         return ec;
@@ -35,7 +34,7 @@ public class ServiciuEvenimentImplementation implements ServiciuEveniment {
     @Override
     public Eveniment adaugaEvenimentSportiv(String nume, Locatie locatie, LocalDateTime data, String echipa1, String echipa2, boolean esteDerby) {
         EvenimentSportiv es = new EvenimentSportiv(nume, locatie, data, echipa1, echipa2, esteDerby);
-        evenimente.add(es);
+        EvenimentRepo.adaugaEveniment(es);
         System.out.println("Eveniment adăugat cu succes: " + es.toString());
 
         return es;
@@ -45,7 +44,7 @@ public class ServiciuEvenimentImplementation implements ServiciuEveniment {
     @Override
     public void stergeEveniment(Eveniment eveniment) {
         System.out.println("Eveniment șters: " + eveniment.toString());
-        evenimente.remove(eveniment);
+        EvenimentRepo.stergeEveniment(eveniment);
     }
 
     @Override
@@ -60,15 +59,16 @@ public class ServiciuEvenimentImplementation implements ServiciuEveniment {
 
     @Override
     public List<Eveniment> getEvenimenteDupaTip(TipEveniment tip) {
-        return evenimente.stream()
+        return EvenimentRepo.getEvenimente().stream()
                 .filter(e -> e.getTip().equals(tip))
                 .collect(Collectors.toList());
     }
 
+
     @Override
     public List<Eveniment> getEvenimenteViitoare() {
         LocalDateTime acum = LocalDateTime.now();
-        return evenimente.stream()
+        return EvenimentRepo.getEvenimente().stream()
                 .filter(e -> e.getData().isAfter(acum))
                 .collect(Collectors.toList());
     }
