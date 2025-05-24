@@ -31,8 +31,6 @@ Ticketify este o aplicație Java care permite utilizatorilor să caute, să reze
 
 #### 📦 Tipuri de obiecte (minim 8):
 
-#### 📦 Tipuri de obiecte (minim 8):
-
 1. `Bilet` – reprezintă un bilet cumpărat pentru un eveniment  
 2. `Client` – reprezintă un utilizator al aplicației  
 3. `Eveniment` – clasa de bază pentru orice tip de eveniment  
