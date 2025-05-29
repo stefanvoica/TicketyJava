@@ -91,7 +91,7 @@ public class Bilet implements Comparable<Bilet> {
         return "Bilet{" +
                 "id=" + id +
                 ", eveniment=" + eveniment +
-                ", client=" + client +
+                ", client=" + client.getNume() +
                 ", locuri=" + locuri +
                 ", pret=" + pret +
                 ", validat=" + validat +

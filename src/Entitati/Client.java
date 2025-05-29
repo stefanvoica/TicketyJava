@@ -9,16 +9,14 @@ public class Client implements Comparable<Client> {
     private String email;
     private int varsta;
     private String adresa;
-    private int numarBilete;
     private List<Bilet> bilete;
 
-    public Client(int id, String nume, String email, int varsta, String adresa, int numarBilete, List<Bilet> bilete) {
+    public Client(int id, String nume, String email, int varsta, String adresa, List<Bilet> bilete) {
         this.id = id;
         this.nume = nume;
         this.email = email;
         this.varsta = varsta;
         this.adresa = adresa;
-        this.numarBilete = numarBilete;
         this.bilete = bilete;
     }
 
@@ -27,14 +25,12 @@ public class Client implements Comparable<Client> {
         this.email = email;
         this.varsta = varsta;
         this.adresa = adresa;
-        this.numarBilete = 0;
         this.bilete = new ArrayList<>();
     }
 
     public void adaugaBilet(Bilet bilet) {
         try {
-            this.bilete.add(bilet);  // Adaugă biletul la lista de bilete
-            numarBilete++;  // Actualizează numărul de bilete
+            this.bilete.add(bilet);
         } catch (Exception e) {
             System.out.println("Eroare la adăugarea biletului: " + e.getMessage());
         }
@@ -51,10 +47,6 @@ public class Client implements Comparable<Client> {
 
     public String getEmail() {
         return email;
-    }
-
-    public int getNumarBilete() {
-        return numarBilete;
     }
 
     public int getId() {
@@ -89,9 +81,6 @@ public class Client implements Comparable<Client> {
         this.adresa = adresa;
     }
 
-    public void setNumarBilete(int numarBilete) {
-        this.numarBilete = numarBilete;
-    }
 
     public void setBilete(List<Bilet> bilete) {
         this.bilete = bilete;
@@ -105,9 +94,12 @@ public class Client implements Comparable<Client> {
                 ", email='" + email + '\'' +
                 ", varsta=" + varsta +
                 ", adresa='" + adresa + '\'' +
-                ", numarBilete=" + numarBilete +
                 ", bilete=" + bilete +
                 '}';
+    }
+
+    public int getNumarBilete() {
+        return bilete.size();
     }
 
     @Override

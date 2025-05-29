@@ -7,6 +7,8 @@ import Servicii.ServiciuEvenimentImplementation;
 import Utile.TipEveniment;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class EvenimentMeniu {
@@ -91,14 +93,17 @@ public class EvenimentMeniu {
     }
 
     private LocalDateTime citesteData() {
-        System.out.print("Data (yyyy-mm-dd hh:mm): ");
-        String[] parts = sc.nextLine().split("[\sT:]|");
-        return LocalDateTime.of(
-                Integer.parseInt(parts[0]),
-                Integer.parseInt(parts[1]),
-                Integer.parseInt(parts[2]),
-                Integer.parseInt(parts[3]),
-                Integer.parseInt(parts[4])
-        );
+        System.out.print("Data (yyyy-MM-dd HH:mm): ");
+        String input = sc.nextLine().trim();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        try {
+            return LocalDateTime.parse(input, formatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Format greșit! Introdu data exact în formatul: yyyy-MM-dd HH:mm (ex: 2025-12-29 23:58)");
+            return citesteData();  // recursiv, reîncearcă
+        }
     }
+
+
 }

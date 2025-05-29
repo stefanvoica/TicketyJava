@@ -35,6 +35,8 @@ public class ServiciuClientImplementation implements ServiciuClient {
         return biletDAO.readByClientId(client.getId());
     }
 
+
+
     public void actualizeazaClient(int id, String nume, String email, int varsta, String adresa) {
         Client c = clientDAO.read(id);
         c.setNume(nume);

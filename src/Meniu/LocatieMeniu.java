@@ -1,5 +1,6 @@
 package Meniu;
 
+import Exceptii.NumeExceptie;
 import Servicii.ServiciuLocatie;
 import Servicii.ServiciuLocatieImplementation;
 
@@ -33,13 +34,23 @@ public class LocatieMeniu {
     }
 
     private void adaugaLocatie() {
-        System.out.print("Nume: ");
-        String nume = sc.nextLine();
-        System.out.print("Adresă: ");
-        String adresa = sc.nextLine();
-        System.out.print("Capacitate: ");
-        int capacitate = Integer.parseInt(sc.nextLine());
-        serviciu.adaugaLocatie(nume, adresa, capacitate);
+        try {
+            System.out.print("Nume: ");
+            String nume = sc.nextLine();
+            if (nume.equals(""))
+                throw new NumeExceptie();
+            System.out.print("Adresă: ");
+            String adresa = sc.nextLine();
+            System.out.print("Capacitate: ");
+            int capacitate = Integer.parseInt(sc.nextLine());
+            serviciu.adaugaLocatie(nume, adresa, capacitate);
+        }
+        catch(NumeExceptie e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+
     }
 
     private void cautaLocatieDupaId() {

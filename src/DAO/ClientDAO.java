@@ -1,6 +1,8 @@
 package DAO;
 
 import Entitati.Client;
+import DAO.BiletDAO;
+import Entitati.Bilet;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,13 +24,12 @@ public class ClientDAO extends GenericDAO<Client> {
 
     @Override
     public void create(Client client) {
-        String sql = "INSERT INTO Client (nume, email, varsta, adresa, numar_bilete) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Client (nume, email, varsta, adresa) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, client.getNume());
             stmt.setString(2, client.getEmail());
             stmt.setInt(3, client.getVarsta());
             stmt.setString(4, client.getAdresa());
-            stmt.setInt(5, client.getNumarBilete());
 
             stmt.executeUpdate();
 
@@ -51,15 +52,19 @@ public class ClientDAO extends GenericDAO<Client> {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Client(
+                    Client client = new Client(
                             rs.getInt("id"),
                             rs.getString("nume"),
                             rs.getString("email"),
                             rs.getInt("varsta"),
                             rs.getString("adresa"),
-                            rs.getInt("numar_bilete"),
-                            new ArrayList<>() // biletele pot fi adăugate separat
+                            new ArrayList<>()
                     );
+
+                    List<Bilet> bilete = BiletDAO.getInstance().readByClientId(client.getId());
+                    client.setBilete(bilete);
+
+                    return client;
                 }
             }
         } catch (SQLException e) {
@@ -68,15 +73,36 @@ public class ClientDAO extends GenericDAO<Client> {
         return null;
     }
 
+    public Client readWithoutBilete(int id) {
+        String sql = "SELECT * FROM Client WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Client(
+                            rs.getInt("id"),
+                            rs.getString("nume"),
+                            rs.getString("email"),
+                            rs.getInt("varsta"),
+                            rs.getString("adresa"),
+                            new ArrayList<>());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     @Override
     public void update(Client client) {
-        String sql = "UPDATE Client SET nume = ?, email = ?, varsta = ?, adresa = ?, numar_bilete = ? WHERE id = ?";
+        String sql = "UPDATE Client SET nume = ?, email = ?, varsta = ?, adresa = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, client.getNume());
             stmt.setString(2, client.getEmail());
             stmt.setInt(3, client.getVarsta());
             stmt.setString(4, client.getAdresa());
-            stmt.setInt(5, client.getNumarBilete());
             stmt.setInt(6, client.getId());
 
             stmt.executeUpdate();
@@ -103,19 +129,24 @@ public class ClientDAO extends GenericDAO<Client> {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                clienti.add(new Client(
+                Client client = new Client(
                         rs.getInt("id"),
                         rs.getString("nume"),
                         rs.getString("email"),
                         rs.getInt("varsta"),
                         rs.getString("adresa"),
-                        rs.getInt("numar_bilete"),
                         new ArrayList<>()
-                ));
+                );
+
+                List<Bilet> bilete = BiletDAO.getInstance().readByClientId(client.getId());
+                client.setBilete(bilete);
+
+                clienti.add(client);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return clienti;
     }
+
 }

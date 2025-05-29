@@ -150,7 +150,7 @@ public class BiletDAO extends GenericDAO<Bilet> {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Eveniment eveniment = EvenimentDAO.getInstance().read(rs.getInt("id_eveniment"));
-                    Client client = ClientDAO.getInstance().read(rs.getInt("id_client"));
+                    Client client = ClientDAO.getInstance().readWithoutBilete(rs.getInt("id_client"));
                     double pret = rs.getDouble("pret");
                     Status status = Status.valueOf(rs.getString("status"));
                     int id = rs.getInt("id");
