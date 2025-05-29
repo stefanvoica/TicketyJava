@@ -4,12 +4,13 @@ import Entitati.Bilet;
 import Entitati.Client;
 import Entitati.Eveniment;
 
-import java.util.Set;
+import java.util.List;
 
 public interface ServiciuBilet {
-    // Cumpără unul sau mai multe locuri la un eveniment
-    Bilet cumparaBilet(Client client, Eveniment eveniment, Set<Integer> locuriDorite);
-
-    // Validează un bilet (ex: la intrare) si returneaza daca s-a reusit
-    boolean valideazaBilet(Bilet bilet);
+    void cumparaBilet(int idClient, int idEveniment, String[] locuriStr, double pret);
+    void stergeBilet(int idBilet);
+    Bilet getBiletDupaId(int id);
+    List<Bilet> getToateBiletele();
+    List<Bilet> getBiletePentruClient(int idClient);
+    boolean valideazaBilet(int idBilet);
 }

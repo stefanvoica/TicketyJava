@@ -6,18 +6,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Eveniment {
+    private int id;
     private TipEveniment tip;
     private String nume;
     private Locatie locatie;
     private LocalDateTime data;
     private Set<Integer> locuriOcupate; //In momentul in care se adauga un bilet nou, se incearca adaugarea locurilor noi
 
+    public Eveniment(int id, TipEveniment tip, String nume, Locatie locatie, LocalDateTime data) {
+        this.id = id;
+        this.tip = tip;
+        this.nume = nume;
+        this.locatie = locatie;
+        this.data = data;
+    }
+
     public Eveniment(TipEveniment tip, String nume, Locatie locatie, LocalDateTime data) {
         this.tip = tip;
         this.nume = nume;
         this.locatie = locatie;
         this.data = data;
-        this.locuriOcupate = new HashSet<>();
     }
 
     public LocalDateTime getData() {
@@ -38,6 +46,30 @@ public class Eveniment {
 
     public void setData(LocalDateTime data) {
         this.data = data;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNume() {
+        return nume;
+    }
+
+    public Locatie getLocatie() {
+        return locatie;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTip(TipEveniment tip) {
+        this.tip = tip;
+    }
+
+    public void setLocuriOcupate(Set<Integer> locuriOcupate) {
+        this.locuriOcupate = locuriOcupate;
     }
 
     public void rezervaLocuri(Set<Integer> locuriDorite) {
@@ -68,7 +100,8 @@ public class Eveniment {
     @Override
     public String toString() {
         return "Eveniment{" +
-                "tip=" + tip +
+                "id=" + id +
+                ", tip=" + tip +
                 ", nume='" + nume + '\'' +
                 ", locatie=" + locatie +
                 ", data=" + data +

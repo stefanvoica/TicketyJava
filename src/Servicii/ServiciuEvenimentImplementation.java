@@ -1,92 +1,112 @@
 package Servicii;
 
+import DAO.EvenimentDAO;
+import DAO.LocatieDAO;
 import Entitati.Eveniment;
 import Entitati.EvenimentCultural;
 import Entitati.EvenimentSportiv;
 import Entitati.Locatie;
-import Repositories.EvenimentRepo;
 import Utile.TipEveniment;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Set;
 
 public class ServiciuEvenimentImplementation implements ServiciuEveniment {
+    private static ServiciuEvenimentImplementation instance = null;
+    private final EvenimentDAO evenimentDAO = EvenimentDAO.getInstance();
+    private final LocatieDAO locatieDAO = LocatieDAO.getInstance();
+    private final ServiciuAudit audit = ServiciuAudit.getInstanta();
+
+    private ServiciuEvenimentImplementation() {}
+
+    public static ServiciuEvenimentImplementation getInstance() {
+        if (instance == null) instance = new ServiciuEvenimentImplementation();
+        return instance;
+    }
+
     @Override
     public Eveniment adaugaEveniment(TipEveniment tip, String nume, Locatie locatie, LocalDateTime data) {
         Eveniment eveniment = new Eveniment(tip, nume, locatie, data);
-        EvenimentRepo.adaugaEveniment(eveniment);
-
-        System.out.println("Eveniment adăugat cu succes: " + eveniment.toString());
-
+        evenimentDAO.create(eveniment);
+        audit.scrieActiune("adauga_eveniment");
+        System.out.println("Eveniment adăugat: " + eveniment);
         return eveniment;
     }
 
     @Override
-    public Eveniment adaugaEvenimentCultural(TipEveniment tip, String nume, Locatie locatie, LocalDateTime data, int durata, String limba) {
-        EvenimentCultural ec = new EvenimentCultural(tip, nume, locatie, data, durata, limba);
-        EvenimentRepo.adaugaEveniment(ec);
-        System.out.println("Eveniment adăugat cu succes: " + ec.toString());
+    public Eveniment adaugaEvenimentSportiv(String nume, Locatie locatie, LocalDateTime data,
+                                            String echipa1, String echipa2, boolean esteDerby) {
+        EvenimentSportiv es = new EvenimentSportiv(nume, locatie, data, echipa1, echipa2, esteDerby);
+        evenimentDAO.create(es);
+        audit.scrieActiune("adauga_eveniment_sportiv");
+        System.out.println("Eveniment sportiv adăugat: " + es);
+        return es;
+    }
 
+    @Override
+    public Eveniment adaugaEvenimentCultural(TipEveniment tip, String nume, Locatie locatie, LocalDateTime data,
+                                             int durata, String limba) {
+        EvenimentCultural ec = new EvenimentCultural(tip, nume, locatie, data, durata, limba);
+        evenimentDAO.create(ec);
+        audit.scrieActiune("adauga_eveniment_cultural");
+        System.out.println("Eveniment cultural adăugat: " + ec);
         return ec;
     }
 
     @Override
-    public Eveniment adaugaEvenimentSportiv(String nume, Locatie locatie, LocalDateTime data, String echipa1, String echipa2, boolean esteDerby) {
-        EvenimentSportiv es = new EvenimentSportiv(nume, locatie, data, echipa1, echipa2, esteDerby);
-        EvenimentRepo.adaugaEveniment(es);
-        System.out.println("Eveniment adăugat cu succes: " + es.toString());
-
-        return es;
+    public void stergeEveniment(int idEveniment) {
+        evenimentDAO.delete(idEveniment);
+        audit.scrieActiune("sterge_eveniment");
+        System.out.println("Eveniment șters cu ID-ul: " + idEveniment);
     }
 
-
-    @Override
-    public void stergeEveniment(Eveniment eveniment) {
-        System.out.println("Eveniment șters: " + eveniment.toString());
-        EvenimentRepo.stergeEveniment(eveniment);
-    }
-
-    @Override
-    public void actualizeazaEveniment(Eveniment eveniment, String numeNou, Locatie locatieNoua, LocalDateTime dataNoua) {
-        // presupun că modificăm direct referința
-        eveniment.setNume(numeNou);
-        eveniment.setLocatie(locatieNoua);
-        eveniment.setData(dataNoua);
-
-        System.out.println("S-a actualizat cu succes: " + eveniment.toString());
+    public void actualizeazaEveniment(int id, String numeNou, Locatie locatieNoua, LocalDateTime dataNoua) {
+        Eveniment ev = new Eveniment(id, null, numeNou, locatieNoua, dataNoua);
+        evenimentDAO.update(ev);
+        audit.scrieActiune("actualizeaza_eveniment");
+        System.out.println("Eveniment actualizat.");
     }
 
     @Override
     public List<Eveniment> getEvenimenteDupaTip(TipEveniment tip) {
-        return EvenimentRepo.getEvenimente().stream()
-                .filter(e -> e.getTip().equals(tip))
-                .collect(Collectors.toList());
+        audit.scrieActiune("citeste_evenimente_dupa_tip");
+        return evenimentDAO.getEvenimenteDupaTip(tip);
     }
-
 
     @Override
     public List<Eveniment> getEvenimenteViitoare() {
-        LocalDateTime acum = LocalDateTime.now();
-        return EvenimentRepo.getEvenimente().stream()
-                .filter(e -> e.getData().isAfter(acum))
-                .collect(Collectors.toList());
+        audit.scrieActiune("citeste_evenimente_viitoare");
+        return evenimentDAO.getEvenimenteViitoare();
+    }
+
+    @Override
+    public Eveniment getEvenimentDupaId(int id) {
+        audit.scrieActiune("citeste_eveniment_dupa_id");
+        return evenimentDAO.read(id);
     }
 
     @Override
     public void rezervaLocuri(Eveniment eveniment, Set<Integer> locuri) {
-        Set<Integer> locuriLibere = eveniment.getLocuriLibere();
-        if (!locuriLibere.containsAll(locuri)) {
-            throw new IllegalArgumentException("Unele locuri sunt deja ocupate sau invalide!");
+        Set<Integer> libere = eveniment.getLocuriLibere();
+        if (!libere.containsAll(locuri)) {
+            throw new IllegalArgumentException("Locuri indisponibile.");
         }
         eveniment.rezervaLocuri(locuri);
-        System.out.printf("S-au rezervat cu succes locurile %s la eveniment %s%n", locuri.toString(), eveniment.toString());
+        audit.scrieActiune("rezerva_locuri_eveniment");
+        System.out.println("Rezervare efectuată: " + locuri);
     }
 
     @Override
     public void elibereazaLocuri(Eveniment eveniment, Set<Integer> locuri) {
         eveniment.getLocuriOcupate().removeAll(locuri);
-        System.out.printf("S-au eliberat cu succes locurile %s la eveniment %s%n", locuri.toString(), eveniment.toString());
+        audit.scrieActiune("elibereaza_locuri_eveniment");
+        System.out.println("Locuri eliberate: " + locuri);
+    }
 
+    @Override
+    public List<Eveniment> getToateEvenimentele() {
+        audit.scrieActiune("citeste_toate_evenimentele");
+        return evenimentDAO.readAll();
     }
 }

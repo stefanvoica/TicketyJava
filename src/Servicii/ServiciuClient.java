@@ -2,16 +2,15 @@ package Servicii;
 
 import Entitati.Bilet;
 import Entitati.Client;
-import Entitati.Eveniment;
-import Utile.Status;
 
 import java.util.List;
-import java.util.Set;
 
 public interface ServiciuClient {
-    // Creează și înregistrează un nou client
-    Client creazaClient(String nume, String email, int varsta, String adresa);
-
-    // Returnează lista de bilete ale clientului
+    Client adaugaClient(String nume, String email, int varsta, String adresa);
     List<Bilet> getBileteClient(Client client);
+
+    void actualizeazaClient(int id, String nume, String email, int varsta, String adresa);
+    void stergeClient(int id);
+    Client getClientDupaId(int id);
+    List<Client> getTotiClientii();
 }

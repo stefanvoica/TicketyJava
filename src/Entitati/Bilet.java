@@ -7,7 +7,7 @@ import java.util.Set;
 import static Utile.ClientUtils.idCurent;
 
 public class Bilet implements Comparable<Bilet> {
-    private final int idBilet;
+    private int id;
     private Eveniment eveniment;
     private Client client;
     private Set<Integer> locuri; //lista cu locuri rezervate
@@ -15,7 +15,7 @@ public class Bilet implements Comparable<Bilet> {
     private Status validat;
 
     public Bilet(Eveniment eveniment, Client client, Set<Integer> locuri, double pret) {
-        this.idBilet = idCurent;
+        this.id = idCurent;
         idCurent++;
         this.eveniment = eveniment;
         this.client = client;
@@ -23,6 +23,16 @@ public class Bilet implements Comparable<Bilet> {
         this.pret = pret;
         this.validat = Status.NEVALIDAT;
     }
+
+    public Bilet(int id, Eveniment eveniment, Client client, Set<Integer> locuri, double pret, Status validat) {
+        this.id = id;
+        this.eveniment = eveniment;
+        this.client = client;
+        this.locuri = locuri;
+        this.pret = pret;
+        this.validat = validat;
+    }
+
 
     public void setValidat(Status validat) {
         this.validat = validat;
@@ -36,10 +46,50 @@ public class Bilet implements Comparable<Bilet> {
         return validat;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public Eveniment getEveniment() {
+        return eveniment;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public Set<Integer> getLocuri() {
+        return locuri;
+    }
+
+    public Status getValidat() {
+        return validat;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setEveniment(Eveniment eveniment) {
+        this.eveniment = eveniment;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public void setLocuri(Set<Integer> locuri) {
+        this.locuri = locuri;
+    }
+
+    public void setPret(double pret) {
+        this.pret = pret;
+    }
+
     @Override
     public String toString() {
         return "Bilet{" +
-                "idBilet=" + idBilet +
+                "id=" + id +
                 ", eveniment=" + eveniment +
                 ", client=" + client +
                 ", locuri=" + locuri +

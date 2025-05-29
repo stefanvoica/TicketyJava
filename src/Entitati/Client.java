@@ -4,12 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Client implements Comparable<Client> {
+    private int id;
     private String nume;
     private String email;
     private int varsta;
     private String adresa;
     private int numarBilete;
     private List<Bilet> bilete;
+
+    public Client(int id, String nume, String email, int varsta, String adresa, int numarBilete, List<Bilet> bilete) {
+        this.id = id;
+        this.nume = nume;
+        this.email = email;
+        this.varsta = varsta;
+        this.adresa = adresa;
+        this.numarBilete = numarBilete;
+        this.bilete = bilete;
+    }
 
     public Client(String nume, String email, int varsta, String adresa) {
         this.nume = nume;
@@ -42,18 +53,60 @@ public class Client implements Comparable<Client> {
         return email;
     }
 
-    private int getNumarBilete() {
+    public int getNumarBilete() {
         return numarBilete;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getVarsta() {
+        return varsta;
+    }
+
+    public String getAdresa() {
+        return adresa;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNume(String nume) {
+        this.nume = nume;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setVarsta(int varsta) {
+        this.varsta = varsta;
+    }
+
+    public void setAdresa(String adresa) {
+        this.adresa = adresa;
+    }
+
+    public void setNumarBilete(int numarBilete) {
+        this.numarBilete = numarBilete;
+    }
+
+    public void setBilete(List<Bilet> bilete) {
+        this.bilete = bilete;
     }
 
     @Override
     public String toString() {
         return "Client{" +
-                "nume='" + nume + '\'' +
+                "id=" + id +
+                ", nume='" + nume + '\'' +
                 ", email='" + email + '\'' +
                 ", varsta=" + varsta +
                 ", adresa='" + adresa + '\'' +
                 ", numarBilete=" + numarBilete +
+                ", bilete=" + bilete +
                 '}';
     }
 

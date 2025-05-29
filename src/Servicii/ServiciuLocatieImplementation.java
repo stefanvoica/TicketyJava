@@ -1,56 +1,54 @@
 package Servicii;
 
+import DAO.LocatieDAO;
 import Entitati.Locatie;
-import Repositories.LocatieRepo;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
 
 public class ServiciuLocatieImplementation implements ServiciuLocatie {
-    @Override
-    public void adaugaLocatie(Locatie locatie) {
-        LocatieRepo.adaugaLocatie(locatie);
-        System.out.println("Locația a fost adăugată: " + locatie.getNume());
+    private static ServiciuLocatieImplementation instance = null;
+    private final LocatieDAO locatieDAO = LocatieDAO.getInstance();
+    private final ServiciuAudit audit = ServiciuAudit.getInstanta();
+
+    private ServiciuLocatieImplementation() {}
+
+    public static ServiciuLocatieImplementation getInstance() {
+        if (instance == null) instance = new ServiciuLocatieImplementation();
+        return instance;
     }
 
     @Override
-    public void stergeLocatie(String numeLocatie) {
-        for (Locatie locatie : LocatieRepo.getLocatii()) {
-            if (locatie.getNume().equals(numeLocatie)) {
-                LocatieRepo.stergeLocatie(locatie);
-                System.out.println("Locația a fost ștearsă: " + numeLocatie);
-                return;
-            }
-        }
-        System.out.println("Locația cu numele " + numeLocatie + " nu a fost găsită.");
+    public void adaugaLocatie(String nume, String adresa, int capacitate) {
+        Locatie locatie = new Locatie(nume, adresa, capacitate);
+        locatieDAO.create(locatie);
+        audit.scrieActiune("adauga_locatie");
+        System.out.println("Locația a fost adăugată cu ID: " + locatie.getId());
     }
 
     @Override
-    public Locatie cautaLocatie(String numeLocatie) {
-        for (Locatie locatie : LocatieRepo.getLocatii()) {
-            if (locatie.getNume().equals(numeLocatie)) {
-                return locatie;
-            }
-        }
-        throw new NoSuchElementException("Locația cu numele '" + numeLocatie + "' nu a fost găsită.");
+    public void stergeLocatie(int id) {
+        locatieDAO.delete(id);
+        audit.scrieActiune("sterge_locatie");
+        System.out.println("Locația a fost ștearsă cu ID-ul: " + id);
     }
 
     @Override
-    public void modificaLocatie(String numeLocatie, Locatie locatieNoua) {
-        List<Locatie> lista = LocatieRepo.getLocatii();
-        ListIterator<Locatie> iterator = lista.listIterator();
+    public Locatie getLocatieDupaId(int id) {
+        audit.scrieActiune("citeste_locatie_dupa_id");
+        return locatieDAO.read(id);
+    }
 
-        while (iterator.hasNext()) {
-            Locatie locatie = iterator.next();
-            if (locatie.getNume().equals(numeLocatie)) {
-                iterator.set(locatieNoua);
-                System.out.println("Locația a fost modificată: " + locatieNoua.getNume());
-                return;
-            }
-        }
+    @Override
+    public void actualizeazaLocatie(int id, String nume, String adresa, int capacitate) {
+        Locatie locatie = new Locatie(id, nume, adresa, capacitate);
+        locatieDAO.update(locatie);
+        audit.scrieActiune("actualizeaza_locatie");
+        System.out.println("Locația a fost actualizată.");
+    }
 
-        System.out.println("Locația cu numele " + numeLocatie + " nu a fost găsită.");
+    @Override
+    public List<Locatie> getToateLocatiile() {
+        audit.scrieActiune("citeste_toate_locatiile");
+        return locatieDAO.readAll();
     }
 }
